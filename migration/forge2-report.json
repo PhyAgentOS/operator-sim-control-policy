@@ -1,7 +1,6 @@
 {
   "repository": "operator-sim-control-policy",
   "node_candidate_version": "2.0.0",
-  "baseline_commit": "83a6400bbcb5087ecbe23468d37650f7f9cc6240",
   "changes": [
     "Upgrade Tool/Msgs bindings; remove vendored protocol and private imports.",
     "Synchronize English/Chinese root README guidance and frozen dependencies."
