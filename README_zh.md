@@ -30,7 +30,7 @@ ToolSpec 的 `implementation_id` 是部署绑定标识，可不同于包名或 N
 [info.py](src/sim_control_policy_node/info.py)，reset 编排见
 [control.py](src/sim_control_policy_node/control.py)。
 
-兼容性：当前依赖声明为 `dora-rs==0.4.1`、`forge-msgs==1.0.1`；以 [pyproject.toml](pyproject.toml) 与 [uv.lock](uv.lock) 为准。 Tool 协议实现为仓库内 vendored 代码。 这些声明不构成跨版本互操作保证；使用制品时还需核对 build revision 和 Skill lock。
+兼容性：当前依赖声明为 `dora-rs>=1.0.1,<2`、`forge-msgs>=2.0.0,<3`；以 [pyproject.toml](pyproject.toml) 与 [uv.lock](uv.lock) 为准。 Tool 协议实现来自正式 `forge-tool[dora]` 分发包。 这些声明不构成跨版本互操作保证；使用制品时还需核对 build revision 和 Skill lock。
 
 后续修改 Node 入口、Endpoint 或 Tool API 时，请同步更新本节及对应配置/契约，遵循 [Node README 规范](https://github.com/PhyAgentOS/forge/blob/master/CONTRIBUTING.md#node-readme-contract)。
 
@@ -108,10 +108,15 @@ uv run ruff check .
 scripts/build_pyinstaller.sh   # single-file executable -> dist/sim_control_policy
 ```
 
-`forge_tool` 内置于 `src/forge_tool/`；`sim_control_policy_node/__init__.py`
-把它加入 `sys.path`，PyInstaller 下也适用。应与其他策略节点中的对应副本保持字节一致。
+`forge_tool` 由正式 `forge-tool[dora]>=2.0.0,<3` 分发包提供，不再维护仓库内副本。
 
 ## 许可证
 
 本仓库使用 Apache License 2.0，详见 [LICENSE](LICENSE)、[NOTICE](NOTICE) 与
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+
+## Forge 2.x 迁移
+
+本分支准备节点版本 `2.0.0`，适配 Dora 1.x，迁移验证锁定 Dora `1.0.1`。使用正式 Forge 2.x 分发包；Common 至少为 `2.1.0`。此次更新包括依赖锁文件与各独立可执行入口。
+
+每轮报告必须列出仓库、改动和测试证据，包括各节点的 `dora run` 记录，以及包含 `adapter-forge-gateway` 的串联测试。缺少硬件或模型的验收项保持待验证。源码 PR 不等于正式发布；整体验收通过后再同步 GitLab。
