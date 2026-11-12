@@ -1,0 +1,29 @@
+gateway: DEBUG    building node
+target: DEBUG    building node
+16:09:59 DEBUG  gateway: daemon::spawner spawning node
+16:09:59 DEBUG  target: daemon::spawner spawning node
+
+16:09:59 INFO   [dora]: dora daemon finished building nodes, spawning...
+
+16:09:59 INFO   gateway: spawner spawning `${WORKSPACE}/adapter-forge-gateway/.venv/bin/python` in `${WORKSPACE}/validation/downstream-msgs210-20261112/runtime/sim-control-policy/chain`
+16:09:59 DEBUG  gateway: spawner spawned node with pid 78444
+16:09:59 INFO   target: spawner spawning `${WORKSPACE}/operator-sim-control-policy/.venv/bin/forge-sim-control-policy` in `${WORKSPACE}/validation/downstream-msgs210-20261112/runtime/sim-control-policy/chain`
+16:09:59 DEBUG  target: spawner spawned node with pid 78445
+16:10:00 INFO   target: daemon node is ready
+16:10:00 INFO   gateway: daemon node is ready
+16:10:00 INFO   [dora]: daemon all nodes are ready, starting dataflow
+16:10:00 stdout gateway: INFO:     Started server process [78444]
+16:10:00 stdout gateway: INFO:     Uvicorn running on http://127.0.0.1:50746 (Press CTRL+C to quit)
+16:10:00 stdout gateway: 2026-11-12 16:10:00 - forge_gateway.cli - INFO - gateway serving http/ws on 127.0.0.1:50746
+16:10:00 stdout gateway: INFO:     127.0.0.1:50776 - "GET /tools HTTP/1.1" 200 OK
+2026-11-12T08:10:09.966407Z  INFO dora_daemon: stop-after timeout reached (10s) -> stopping dataflow
+2026-11-12T08:10:09.966592Z  INFO run_inner: dora_daemon: stopping after 10s as requested health_check_interval_duration=None self.daemon_id=DaemonId { machine_id: None, uuid: 01a1cece-779b-7440-b456-99b0f440b362 }
+16:10:09 stdout gateway: 2026-11-12 16:10:09 - forge_gateway.cli - INFO - gateway Dora loop exited: stop
+16:10:09 stdout gateway: INFO:     Shutting down
+16:10:10 DEBUG  target: daemon handling node stop with exit status Success (restart: false, restart_count: 0)
+16:10:10 INFO   target: daemon target finished successfully
+16:10:10 stdout gateway: INFO:     Finished server process [78444]
+16:10:10 DEBUG  gateway: daemon handling node stop with exit status Success (restart: false, restart_count: 0)
+16:10:10 INFO   gateway: daemon gateway finished successfully
+16:10:10 INFO   [dora]: daemon dataflow finished on machine `01a1cece-779b-7440-b456-99b0f440b362`
+2026-11-12T08:10:10.153018Z  INFO run_inner: dora_daemon: exiting daemon because all required dataflows are finished health_check_interval_duration=None self.daemon_id=DaemonId { machine_id: None, uuid: 01a1cece-779b-7440-b456-99b0f440b362 }
