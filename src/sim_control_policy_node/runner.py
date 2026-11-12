@@ -18,6 +18,7 @@ import uuid
 from collections.abc import Callable, Iterable
 from typing import Any, cast
 
+from forge_msgs import ToolMessage
 from forge_tool import (
     ToolAccepted,
     ToolContext,
@@ -34,7 +35,6 @@ from forge_tool import (
     make_result_request_envelope,
     result_response_from_payload,
 )
-from forge_tool._tool_message import ToolMessage
 from forge_tool.dora import (
     DoraToolEndpointBinding,
     tool_envelope_to_message,

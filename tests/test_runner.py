@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from forge_msgs import ToolMessage
 from forge_tool import (
     EndpointRegistryResponse,
     ToolAccepted,
@@ -24,11 +25,11 @@ from forge_tool import (
     status_response_from_payload,
     validate_registration_envelope,
 )
-from forge_tool._tool_message import ToolMessage
 from forge_tool.dora import (
     tool_envelope_to_message,
     tool_message_to_envelope,
 )
+
 from sim_control_policy_node.config import InnerToolSpec, ResetConfig, SimControlPolicyConfig
 from sim_control_policy_node.info import INFO_OPERATION, RESET_OPERATION, SIM_CONTROL_DESCRIPTOR
 from sim_control_policy_node.robot_descriptor import JointDescriptor, RobotDescriptor

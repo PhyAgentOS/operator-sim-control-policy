@@ -1,0 +1,86 @@
+{
+  "repository": "operator-sim-control-policy",
+  "node_candidate_version": "2.0.0",
+  "changes": [
+    "Upgrade Tool/Msgs bindings; remove vendored protocol and private imports.",
+    "Synchronize English/Chinese root README guidance and frozen dependencies."
+  ],
+  "software_tests": {
+    "log": "tests.log",
+    "summary": [
+      "68 passed in 10.91s"
+    ]
+  },
+  "dora_cli": "1.0.1",
+  "runtime_records": [
+    {
+      "repo": "operator-sim-control-policy",
+      "entry": "sim-control-policy",
+      "mode": "single",
+      "command": [
+        "${WORKSPACE}/.test-env/bin/dora",
+        "run",
+        "${WORKSPACE}/validation/forge2/runtime/sim-control-policy/single/dataflow.yaml",
+        "--stop-after",
+        "6s"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 6.087,
+      "passed": true,
+      "error": null,
+      "scope": "Startup, timer processing and normal Dora stop only; no hardware or action execution."
+    },
+    {
+      "repo": "operator-sim-control-policy",
+      "entry": "sim-control-policy",
+      "command": [
+        "${WORKSPACE}/.test-env/bin/dora",
+        "run",
+        "${WORKSPACE}/validation/forge2/runtime/sim-control-policy/chain/dataflow.yaml",
+        "--stop-after",
+        "10s"
+      ],
+      "includes_gateway": true,
+      "passed": true,
+      "scope": "Real Tool provider registration and registry response over Dora; HTTP discovery confirms the endpoint. No hardware/action execution.",
+      "discovery": {
+        "ok": true,
+        "data": {
+          "revision": 1,
+          "tools": [
+            {
+              "endpoint_id": "sim.control",
+              "descriptor": {
+                "protocol_version": "forge.tool.endpoint/v1alpha1",
+                "endpoint_id": "sim.control",
+                "operations": [
+                  {
+                    "name": "get_robot_info",
+                    "semantics": "query",
+                    "cancellable": false,
+                    "stoppable": false,
+                    "status_supported": false,
+                    "max_concurrency": 1
+                  },
+                  {
+                    "name": "reset",
+                    "semantics": "action",
+                    "cancellable": false,
+                    "stoppable": false,
+                    "status_supported": true,
+                    "max_concurrency": 1
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "exit_code": 0
+    }
+  ],
+  "runtime_missing": null,
+  "acceptance": "Pending final platform artifacts, applicable hardware/model execution and rollback/sustained-run gates.",
+  "pillow_dependency": "Node locks currently resolve published Forge Msgs 2.0.0. Security audit remains dependent on Forge PR #3 and a published security-fixed Msgs release; no vulnerability suppression was added.",
+  "gitlab_synchronization": "Not started; follows full acceptance."
+}

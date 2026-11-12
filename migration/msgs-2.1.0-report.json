@@ -1,0 +1,178 @@
+{
+  "repository": "operator-sim-control-policy",
+  "round": "msgs-2.1.0 alignment / 2026-11-12",
+  "breaking_change": "Forge 1.x / Dora 0.4.x to Forge 2.x / Dora 1.x requires aligned Forge packages, runtime services, node peers and rebuilt artifacts. Forge families version independently. forge_msgs.v1 remains unchanged.",
+  "changes": [
+    "Update paired README deployment/version compatibility notice",
+    "Require Python forge-msgs >=2.1.0,<3 and lock public Msgs 2.1.0 / Pillow 13.0.0, preserving all other locked package versions"
+  ],
+  "lock_updates": [
+    {
+      "repo": "operator-sim-control-policy",
+      "lock": "uv.lock",
+      "command": [
+        "${WORKSPACE}/.tools/bin/uv",
+        "lock",
+        "--upgrade-package",
+        "forge-msgs==2.1.0",
+        "--upgrade-package",
+        "pillow==13.0.0"
+      ],
+      "exit_code": 0,
+      "version_changes": [
+        {
+          "name": "forge-msgs",
+          "before": "2.0.0",
+          "after": "2.1.0"
+        },
+        {
+          "name": "pillow",
+          "before": "12.3.0",
+          "after": "13.0.0"
+        }
+      ]
+    }
+  ],
+  "lock_checks": [
+    {
+      "repo": "operator-sim-control-policy",
+      "lock": "uv.lock",
+      "check_exit": 0
+    }
+  ],
+  "software_tests": {
+    "repo": "operator-sim-control-policy",
+    "environment": "${WORKSPACE}/operator-sim-control-policy/.venv/bin/python",
+    "commands": [
+      [
+        "${WORKSPACE}/.tools/bin/uv",
+        "pip",
+        "install",
+        "--python",
+        "${WORKSPACE}/operator-sim-control-policy/.venv/bin/python",
+        "--no-deps",
+        "--index-url",
+        "https://pypi.org/simple",
+        "forge-msgs==2.1.0",
+        "pillow==13.0.0"
+      ],
+      [
+        "${WORKSPACE}/operator-sim-control-policy/.venv/bin/python",
+        "-c",
+        "from importlib.metadata import version; import json; print(json.dumps({n:version(n) for n in ['forge-msgs','pillow','dora-rs']}))"
+      ],
+      [
+        "${WORKSPACE}/.tools/bin/uv",
+        "pip",
+        "check",
+        "--python",
+        "${WORKSPACE}/operator-sim-control-policy/.venv/bin/python"
+      ],
+      [
+        "${WORKSPACE}/operator-sim-control-policy/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "--import-mode=importlib"
+      ]
+    ],
+    "scope": "Existing local test environment with exact public Msgs/Pillow update; platform SDK exclusions are reported, not production acceptance.",
+    "update_exit": 0,
+    "versions_exit": 0,
+    "dependency_check_exit": 0,
+    "tests_exit": 0,
+    "test_summary": [
+      "....................................................................     [100%]",
+      "68 passed in 2.56s"
+    ],
+    "installed_versions": {
+      "forge-msgs": "2.1.0",
+      "pillow": "13.0.0",
+      "dora-rs": "1.0.1"
+    }
+  },
+  "dependency_audit": {
+    "repo": "operator-sim-control-policy",
+    "audit_exit": 0,
+    "findings": [],
+    "skipped": []
+  },
+  "dora_run_records": [
+    {
+      "repo": "operator-sim-control-policy",
+      "entry": "sim-control-policy",
+      "command": [
+        "${WORKSPACE}/.test-env/bin/dora",
+        "run",
+        "${WORKSPACE}/validation/downstream-msgs210-20261112/runtime/sim-control-policy/chain/dataflow.yaml",
+        "--stop-after",
+        "10s"
+      ],
+      "includes_gateway": true,
+      "passed": true,
+      "scope": "Real Tool provider registration and registry response over Dora; HTTP discovery confirms the endpoint. No hardware/action execution.",
+      "discovery": {
+        "ok": true,
+        "data": {
+          "revision": 1,
+          "tools": [
+            {
+              "endpoint_id": "sim.control",
+              "descriptor": {
+                "protocol_version": "forge.tool.endpoint/v1alpha1",
+                "endpoint_id": "sim.control",
+                "operations": [
+                  {
+                    "name": "get_robot_info",
+                    "semantics": "query",
+                    "cancellable": false,
+                    "stoppable": false,
+                    "status_supported": false,
+                    "max_concurrency": 1
+                  },
+                  {
+                    "name": "reset",
+                    "semantics": "action",
+                    "cancellable": false,
+                    "stoppable": false,
+                    "status_supported": true,
+                    "max_concurrency": 1
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "exit_code": 0,
+      "mode": "chain",
+      "source_report": "runtime/sim-control-policy/chain/report.json",
+      "runtime_errors": [],
+      "local_evidence": "Full original Dora log is retained under validation/downstream-msgs210-20261112/runtime/sim-control-policy/chain/dora.log"
+    },
+    {
+      "repo": "operator-sim-control-policy",
+      "entry": "sim-control-policy",
+      "mode": "single",
+      "command": [
+        "${WORKSPACE}/.test-env/bin/dora",
+        "run",
+        "${WORKSPACE}/validation/downstream-msgs210-20261112/runtime/sim-control-policy/single/dataflow.yaml",
+        "--stop-after",
+        "6s"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 6.109,
+      "passed": true,
+      "error": null,
+      "scope": "Startup, timer processing and normal Dora stop only; no hardware or action execution.",
+      "source_report": "runtime/sim-control-policy/single/report.json",
+      "runtime_errors": [],
+      "local_evidence": "Full original Dora log is retained under validation/downstream-msgs210-20261112/runtime/sim-control-policy/single/dora.log"
+    }
+  ],
+  "remaining": "Applicable actual hardware/model, final supported-platform artifacts, sustained run and rollback acceptance remain pending.",
+  "acceptance": "Pending; software checks, fake/dummy backends and negative prerequisite records are scoped evidence only. Every new multi-node graph contains adapter-forge-gateway.",
+  "gitlab_sync": "Not performed; follows completed acceptance.",
+  "log_publication": "Original logs remain in the local validation workspace. This public report publishes reviewed commands, outcomes, assertions and limitations only."
+}
