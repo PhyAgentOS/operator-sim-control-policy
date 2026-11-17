@@ -203,3 +203,19 @@ def test_reset_null_keeps_instant_completion(tmp_path: Path) -> None:
     )
 
     assert load_config(config).reset is None
+
+
+def test_joint_state_timeout_defaults_and_validation(tmp_path) -> None:
+    descriptor = tmp_path / "robot.yaml"
+    base = {"robot_descriptor_path": str(descriptor)}
+
+    assert SimControlPolicyConfig.from_dict(base).joint_state_timeout_ms == 200
+    assert (
+        SimControlPolicyConfig.from_dict(
+            {**base, "joint_state_timeout_ms": 500}
+        ).joint_state_timeout_ms
+        == 500
+    )
+    for bad in (0, -1, True, "200"):
+        with pytest.raises(ValueError, match="joint_state_timeout_ms"):
+            SimControlPolicyConfig.from_dict({**base, "joint_state_timeout_ms": bad})
