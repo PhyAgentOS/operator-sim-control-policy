@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 
 import pytest
+from forge_msgs import JointState
 from forge_tool import ToolContext, ToolEndpointError, ToolExecutionKey, ToolRequest
 
 from sim_control_policy_node.info import (
@@ -12,9 +13,8 @@ from sim_control_policy_node.info import (
     STATE_OPERATION,
     SimInfoEndpoint,
 )
-from sim_control_policy_node.state import JointStateCache
-from forge_msgs import JointState
 from sim_control_policy_node.robot_descriptor import JointDescriptor, RobotDescriptor
+from sim_control_policy_node.state import JointStateCache
 
 
 def _descriptor() -> RobotDescriptor:

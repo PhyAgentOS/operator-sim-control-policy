@@ -51,8 +51,8 @@ from .info import (
     STATE_OPERATION,
     SimInfoEndpoint,
 )
-from .state import JointStateCache
 from .robot_descriptor import RobotDescriptor
+from .state import JointStateCache
 
 logger = logging.getLogger(__name__)
 
