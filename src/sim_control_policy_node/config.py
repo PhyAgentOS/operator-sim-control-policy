@@ -47,12 +47,14 @@ class SimControlPolicyConfig:
 
     robot_descriptor_path: Path
     reset: ResetConfig | None = None
+    # Freshness window for the ``get_joint_state`` query (mujoco publishes at 50 Hz).
+    joint_state_timeout_ms: int = 200
 
     @classmethod
     def from_dict(cls, data: dict) -> SimControlPolicyConfig:
         if not isinstance(data, dict):
             raise ValueError("sim control policy config must be a mapping")
-        allowed = {"robot_descriptor_path", "reset"}
+        allowed = {"robot_descriptor_path", "reset", "joint_state_timeout_ms"}
         unknown = sorted(set(data) - allowed)
         if unknown:
             raise ValueError(f"unknown sim control policy config keys: {unknown}")
@@ -60,7 +62,14 @@ class SimControlPolicyConfig:
         if not isinstance(raw, str) or not raw.strip():
             raise ValueError("robot_descriptor_path must be set to a robots/<name>/robot.yaml path")
         reset = None if data.get("reset") is None else _parse_reset(data["reset"])
-        return cls(robot_descriptor_path=Path(raw).expanduser(), reset=reset)
+        timeout = data.get("joint_state_timeout_ms", 200)
+        if isinstance(timeout, bool) or not isinstance(timeout, int) or timeout <= 0:
+            raise ValueError("joint_state_timeout_ms must be a positive integer")
+        return cls(
+            robot_descriptor_path=Path(raw).expanduser(),
+            reset=reset,
+            joint_state_timeout_ms=timeout,
+        )
 
 
 def _positive_int(value: Any, field: str) -> int:
