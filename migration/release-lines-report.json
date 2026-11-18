@@ -15,16 +15,15 @@
     "artifacts": [
       {
         "name": "sim_control_policy_node-2.0.0-py3-none-any.whl",
-        "size": 21769,
-        "sha256": "2fe7e6e827d0916f7ddc31726a53105a3cef2210091ebce89d6ddac6bfc77826"
+        "size": 21769
       },
       {
         "name": "sim_control_policy_node-2.0.0.tar.gz",
-        "size": 17509,
-        "sha256": "f9284f014b56c8bd96b54980b092570217abf277d4c0b3819494b724adaecf25"
+        "size": 17509
       }
     ]
   },
+  "source_profile_scope": "Local candidate worktrees; proposed maintenance changes are not deployed or merged yet. Full checksums and raw logs remain in the local workspace.",
   "source_profiles": [
     {
       "repo": "PhyAgentOS/operator-sim-control-policy",
