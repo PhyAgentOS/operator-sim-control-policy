@@ -1,6 +1,6 @@
 [project]
 name = "sim-control-policy-node"
-version = "0.1.2"
+version = "1.0.0"
 description = "Standalone Forge policy node exposing sim.control (robot info query + scene reset action)."
 readme = "README.md"
 requires-python = ">=3.12"
