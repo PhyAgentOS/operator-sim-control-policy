@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from forge_msgs import ToolMessage
+from forge_msgs import JointState, ToolMessage
 from forge_tool import (
     EndpointRegistryResponse,
     ToolAccepted,
@@ -31,7 +31,12 @@ from forge_tool.dora import (
 )
 
 from sim_control_policy_node.config import InnerToolSpec, ResetConfig, SimControlPolicyConfig
-from sim_control_policy_node.info import INFO_OPERATION, RESET_OPERATION, SIM_CONTROL_DESCRIPTOR
+from sim_control_policy_node.info import (
+    INFO_OPERATION,
+    RESET_OPERATION,
+    SIM_CONTROL_DESCRIPTOR,
+    STATE_OPERATION,
+)
 from sim_control_policy_node.robot_descriptor import JointDescriptor, RobotDescriptor
 from sim_control_policy_node.runner import SimControlPolicyRunner
 
@@ -388,3 +393,41 @@ def test_inner_invoke_error_fails_the_reset() -> None:
         )
     )
     assert _outer_status(node, runner) == "failed"
+
+
+def test_joint_state_query_flows_through_binding() -> None:
+    node = _Node()
+    runner = _runner(node)
+    runner.joint_state.update(
+        JointState(name=["joint1", "gripper"], position=[0.25, 0.01])
+    )
+    invoke = make_invoke_request_envelope(
+        ToolRequest({}),
+        _context(STATE_OPERATION),
+        request_id="invoke-1",
+        endpoint_instance_id="instance-1",
+    )
+
+    runner._handle_tool(_arrow(invoke))
+
+    result = result_of(_invoke_response(node))
+    assert result.status == "succeeded"
+    assert result.outputs["name"] == ["joint1", "gripper"]
+    assert result.outputs["position"] == [0.25, 0.01]
+
+
+def test_joint_state_input_updates_the_cache() -> None:
+    node = _Node()
+    runner = _runner(node)
+    assert runner.joint_state.sample is None
+
+    runner.process_event(
+        {
+            "type": "INPUT",
+            "id": "joint_state",
+            "value": JointState(name=["joint1"], position=[0.4]).to_arrow(),
+        }
+    )
+
+    assert runner.joint_state.sample is not None
+    assert runner.joint_state.sample.state.position == [0.4]
