@@ -115,3 +115,7 @@ scripts/build_pyinstaller.sh   # single-file executable -> dist/sim_control_poli
 
 本仓库使用 Apache License 2.0，详见 [LICENSE](LICENSE)、[NOTICE](NOTICE) 与
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+
+## CI 策略
+
+本分支不再维护自动依赖漏洞审计，也不将其作为 CI 或合并门槛。现有测试、构建及其他检查继续保留。移除审计门槛不改变锁定依赖，也不代表此前报告的漏洞已修复。
