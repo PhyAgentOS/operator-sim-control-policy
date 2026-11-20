@@ -104,6 +104,7 @@ rejected).
 | -------------- | ----------------------------------------------------- |
 | `tool_in`      | Tool envelopes from the gateway (invoke/registry)     |
 | `tool_response`| gateway replies/events for the inner re-home invokes  |
+| `joint_state`  | `mujoco/proprio_state`; feeds `sim.get_joint_state`     |
 | `tick`         | keeps the registration lease and re-home timers driven |
 
 | output        | purpose                                                   |
