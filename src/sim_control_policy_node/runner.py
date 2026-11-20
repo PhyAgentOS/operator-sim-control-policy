@@ -18,7 +18,7 @@ import uuid
 from collections.abc import Callable, Iterable
 from typing import Any, cast
 
-from forge_msgs import ToolMessage
+from forge_msgs import JointState, ToolMessage
 from forge_tool import (
     ToolAccepted,
     ToolContext,
@@ -44,8 +44,15 @@ from forge_tool.dora import (
 from .config import InnerToolSpec, SimControlPolicyConfig
 from .control import InnerHandle, InnerInvoker, SimResetEndpoint
 from .endpoint_lease import EndpointLease
-from .info import INFO_OPERATION, RESET_OPERATION, SIM_CONTROL_DESCRIPTOR, SimInfoEndpoint
+from .info import (
+    INFO_OPERATION,
+    RESET_OPERATION,
+    SIM_CONTROL_DESCRIPTOR,
+    STATE_OPERATION,
+    SimInfoEndpoint,
+)
 from .robot_descriptor import RobotDescriptor
+from .state import JointStateCache
 
 logger = logging.getLogger(__name__)
 
@@ -154,6 +161,7 @@ class SimControlPolicyRunner:
 
             descriptor = load_robot_descriptor(config.robot_descriptor_path)
         self.descriptor = descriptor
+        self.joint_state = JointStateCache(timeout_ms=config.joint_state_timeout_ms)
         self.endpoint_instance_id = endpoint_instance_id or str(uuid.uuid4())
         self.clock = clock
         self._async = asyncio.Runner()
@@ -168,7 +176,8 @@ class SimControlPolicyRunner:
             SIM_CONTROL_DESCRIPTOR,
             endpoint_instance_id=self.endpoint_instance_id,
             operations={
-                INFO_OPERATION: SimInfoEndpoint(descriptor),
+                INFO_OPERATION: SimInfoEndpoint(descriptor, joint_state=self.joint_state),
+                STATE_OPERATION: SimInfoEndpoint(descriptor, joint_state=self.joint_state),
                 RESET_OPERATION: self.reset_endpoint,
             },
         )
@@ -287,6 +296,8 @@ class SimControlPolicyRunner:
                 self._handle_tool(event["value"])
             elif input_id == "tool_response":
                 self._handle_tool_response(event["value"])
+            elif input_id == "joint_state":
+                self.joint_state.update(JointState.from_arrow(event["value"]))
             elif input_id == "tick":
                 self.reset_endpoint.on_tick()
         except (TypeError, ValueError) as exc:

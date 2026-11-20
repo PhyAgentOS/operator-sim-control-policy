@@ -1,15 +1,29 @@
 # Tool Contracts
 
-Endpoint `sim.control` exposes two operations, each with concurrency 1.
+Endpoint `sim.control` exposes three operations, each with concurrency 1.
 
 | tool_id | implementation_id | endpoint_id | operation | semantics |
 | --- | --- | --- | --- | --- |
 | `sim.get_robot_info` | `sim-control-policy` | `sim.control` | `get_robot_info` | query |
+| `sim.get_joint_state` | `sim-control-policy` | `sim.control` | `get_joint_state` | query |
 | `sim.reset` | `sim-control-policy` | `sim.control` | `reset` | action |
 
 The wire contract is implemented by `SimInfoEndpoint` and `SimResetEndpoint`
 (`control.py`) on top of the protocol-independent `RobotDescriptor`
 (`robot_descriptor.py`). The descriptor never depends on `forge_tool`.
+
+## `sim.control/get_joint_state` (query)
+
+Requests take no arguments. Successful outputs are the newest `JointState`
+received on the node's `joint_state` input (`mujoco/proprio_state`): `name`,
+`position`, `velocity`, `effort`, plus `age_ms` describing how long ago the
+sample arrived.
+
+The query fails with `NO_FRESH_ROBOT_STATE` when no sample arrived yet or when
+the newest one is older than `joint_state_timeout_ms` (default 200 ms), so an
+agent never mistakes a stale pose for the current one. This is the only
+read-back path for the joint state; `sim.reset` and the motion tools cannot
+report where the arm actually is.
 
 ## `sim.control/get_robot_info` (query)
 
